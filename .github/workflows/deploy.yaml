@@ -33,3 +33,5 @@ jobs:
         with:
           app-name: 'MyWebAppsuri'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: '.'   # Forces GitHub to package the exact root folder content
+          clean: true
