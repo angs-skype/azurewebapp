@@ -3,32 +3,33 @@ name: Deploy Python App to Azure
 on:
   push:
     branches:
-      - main  # Triggers the pipeline when you push to the main branch
+      - main
+
+# ADD THIS PERMISSIONS BLOCK HERE
+permissions:
+  id-token: write  # This is required for requesting the JWT OIDC token
+  contents: read    # Required to fetch your repository code
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Fetch code from GitHub repository
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Step 2: Setup Python environment
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.14'
 
-      # Step 3: Install Flask dependency from requirements.txt
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Step 4: Zip the code and push it to Azure App Service
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'YOUR_AZURE_WEBAPP_NAME' # Replace with your exact Azure Web App Name
+          app-name: 'YOUR_AZURE_WEBAPP_NAME'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
